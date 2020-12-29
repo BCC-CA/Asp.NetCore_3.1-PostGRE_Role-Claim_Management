@@ -36,7 +36,6 @@ ssh [username]@<ip_address>
 
 ### Install Required Packages
 1. Update All existing Packages for security-
-Update package-
 
 ```console
 sudo dnf update -y
@@ -57,17 +56,16 @@ Install some required packages for deploy-
 sudo dnf install nano net-tools git wget -y
 ```
 
-##### Optional
-Add package repo for Centos 8 (not needed in maximum time)-
-
-```console
-sudo rpm -Uvh https://packages.microsoft.com/config/centos/8/packages-microsoft-prod.rpm
-```
-
 2. Install all required packages-
 
 ```console
 sudo dnf install dotnet-sdk-3.1 aspnetcore-runtime-3.1 dotnet-runtime-3.1 supervisor -y
+```
+
+##### If `dotnet*` not found in `install` command
+
+```console
+sudo rpm -Uvh https://packages.microsoft.com/config/centos/8/packages-microsoft-prod.rpm
 ```
 
 ### Configure Application
