@@ -16,6 +16,7 @@ using WebMarkupMin.AspNetCore3;
 using StartupProject_Asp.NetCore_PostGRE.Data.Enums;
 using StartupProject_Asp.NetCore_PostGRE.AuthorizationRequirement;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace StartupProject_Asp.NetCore_PostGRE
 {
@@ -154,7 +155,7 @@ namespace StartupProject_Asp.NetCore_PostGRE
             services.AddHttpsRedirection(options =>
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-                options.HttpsPort = 5001;
+                options.HttpsPort = 443;
             });
             #endregion
         }
@@ -173,6 +174,16 @@ namespace StartupProject_Asp.NetCore_PostGRE
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            #region Forward all headers to server if any reverse proxy server like Nginx is used
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+            //Allowed for IP - 127.0.0.0/8, [::1]
+            //More can be found in here - https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-apache?view=aspnetcore-5.0#configure-a-proxy-server
+            #endregion
+
             #region Handle http pipeline for making custom action for different error codes
             //app.Use(async (context, next) =>
             //{

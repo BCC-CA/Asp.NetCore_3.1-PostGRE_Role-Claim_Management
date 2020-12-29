@@ -46,10 +46,45 @@ This application is created with [ASP.Net Core 3.1](https://dotnet.microsoft.com
     4. Add User-name change limit
     5. Restrict user from login if wrong pasword is provided for several times
     6. Add 2FA login with QrCode and Google Authinticator
+18. Support for receiving all headers forwarded from `Nginx` or `Apache` in Linux.
 
-## Easy Run and Deploy with Requirements
+## Getting Started
 
-To run this project, [CLI](https://www.c-sharpcorner.com/article/net-core-cli2/) can be enough, but [Visual Studio](https://visualstudio.microsoft.com/vs/) is recommanded because it offers various features to devs.
+1. Clone the repo-
+
+```console
+git clone https://github.com/BCC-CA/Asp.NetCore_3.1-PostGRE_Signing-ASP.git ASP
+cd ./ASP
+```
+
+2. Copy the `appsettings` file-
+
+```console
+copy appsettings.json.example appsettings.json
+```
+
+3. Setup the Database in ***PostGRE server*** (*PgAdmin*) and modify the `appsettings.json` file with proper database crediantials.
+4. Open the `.sln` file with Visual Studio. For this project, the solution file is- `StartupProject-Asp.NetCore-PostGRE.sln` (tested with VS 2019 Community). Then run the command-
+
+    `Build`-> `Build Solution`.
+
+5. Now, database tables should be created with migration and some demo data should be added with seed data. To do those, we should run the command-
+```console
+Update-Database
+```
+6. Run the Project with clicking the button `IIS Express` and project will run with default browser of windows / visual studio.
+
+## Easy Deploy in Centos 8 with Requirements
+
+Publish project command-
+
+```console
+dotnet publish -c Release -o /home/abrar/PublishedWebApp
+```
+More commands can be found in [here](https://www.c-sharpcorner.com/article/net-core-cli2/) and [here](./.doc/Links_and_Commands.md).
+
+Complete deploy to a [Centos 8.x](http://isoredirect.centos.org/centos/8/) server can be found in [this documentation](./.doc/CentOs_8_Deploy.md).
+
 
 ### Prerequisite
 

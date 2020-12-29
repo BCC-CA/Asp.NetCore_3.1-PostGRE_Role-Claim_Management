@@ -34,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include=".doc\CentOs_8_Deploy.md" />
     <None Include=".doc\Links_and_Commands.md" />
   </ItemGroup>
 
