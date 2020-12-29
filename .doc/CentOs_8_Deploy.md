@@ -1,5 +1,7 @@
 # Complete ASP.Net Core deploy in Centos 8
 
+If you need to ***deploy the whole project in a new server***, you can follow [this procedure](#Procedure). If your application is deployed with git and you need to just ***update the project***, please [read this](#Demo-Commands-For-Update-Project).
+
 ## Procedure
 1. [Create a new user in your CentOS](#Create-deployer-user-in-CentOS)
 2. [Install Required Packages](#install-required-packages)
@@ -162,7 +164,7 @@ sudo firewall-cmd --zone=public --add-port=443/tcp --permanent && sudo firewall-
 This application generates a self signed [SSL certificate](https://en.wikipedia.org/wiki/SSL) for make the website https in the application and the application will run in 443 port, so we needed to allow port 443.
 
 
-### Demo Commands For Update Project
+## Demo Commands For Update Project
 
 ```console
 cd ~/asp && git pull && sudo systemctl stop supervisord && rm -rf ~/PublishedWebApp && dotnet publish -c Release -o ~/PublishedWebApp && sudo systemctl start supervisord && cd ~ && tail -f /var/log/xml_sign_asp.out.log
