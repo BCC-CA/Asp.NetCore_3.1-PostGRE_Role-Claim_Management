@@ -152,11 +152,11 @@ namespace StartupProject_Asp.NetCore_PostGRE
             });
             #endregion
             #region Force to use Https Config
-            //services.AddHttpsRedirection(options =>
-            //{
-            //    options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-            //    options.HttpsPort = 443;
-            //});
+            services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+                options.HttpsPort = 443;
+            });
             #endregion
         }
 

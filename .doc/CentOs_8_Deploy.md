@@ -9,6 +9,7 @@ If you need to ***deploy the whole project in a new server***, you can follow [t
 3. [Configure Supervisor](#Configure-Supervisor)
 4. [Configure Application with Supervisor for making the app Up and running with log management](#Configure-Application-with-supervisor)
 5. [Add the application ports in the firewall allowed port](#Add-the-application-ports-in-the-firewall-allowed-port)
+6. [Viewing the server Log](#Viewing-the-server-Log)
 
 ### Create deployer user in CentOS
 
@@ -60,6 +61,7 @@ sudo dnf install nano net-tools git wget -y
 
 ```console
 sudo dnf install dotnet-sdk-3.1 aspnetcore-runtime-3.1 dotnet-runtime-3.1 supervisor -y
+dotnet tool install --global dotnet-ef
 ```
 
 ##### If `dotnet*` not found in `install` command
@@ -72,7 +74,7 @@ sudo rpm -Uvh https://packages.microsoft.com/config/centos/8/packages-microsoft-
 
 1. Clone the project into `user` directory-
 ```console
-cd ~ && git clone https://github.com/BCC-CA/Asp.NetCore_3.1-PostGRE_Signing-ASP.git asp && cd ./asp
+cd ~ && git clone https://github.com/BCC-CA/Asp.NetCore_3.1-PostGRE_Signing-ASP.git asp && cd ./asp && git config pull.ff only
 ```
 
 2. Configure Database-
@@ -81,7 +83,15 @@ cp appsettings.json.example appsettings.json && nano appsettings.json
 ```
 Then edit the `ConnectionStrings`->`DefaultConnection` section for database and edit the `SmtpSettings` section for mail settings. A demo Gmail configuration is given in `SmtpSettings_` part.
 
-3. Deploy the application to the `PublishedWebApp` folder in `user` folder, please provide this command-
+3. Migrate the database-
+
+```console
+dotnet ef database update
+```
+
+This command will create all table in the database and migrate seed data in the database. If running this command is not working, then creating the database from other source can also work.
+
+4. Deploy the application to the `PublishedWebApp` folder in `user` folder, please provide this command-
 
 ```console
 dotnet publish -c Release -o /home/abrar/PublishedWebApp
@@ -126,6 +136,8 @@ Before creating the service, please check the compatiblity by running the applic
 dotnet run  --urls "http://*:80;https://*:443"
 ```
 
+##### Add the application ports in the firewall allowed port
+
 If error occures, then try allowing port `80` and `443` in firewall by running this commands and try again-
 
 ```console
@@ -143,6 +155,10 @@ sudo firewall-cmd --permanent --add-port=80/tcp && sudo firewall-cmd --permanent
 
 # Allow services in firewall
 sudo firewall-cmd --permanent --add-service=http && sudo firewall-cmd --permanent --add-service=https
+
+# Allow the `443` port from `iptable`, `network`, `firewall` and `selinux`
+
+sudo firewall-cmd --zone=public --add-port=80/tcp --permanent && sudo firewall-cmd --zone=public --add-port=443/tcp --permanent && sudo firewall-cmd --reload && netstat -tulnp
 ```
 
 If the application is running smoothly, then try make that up and runing with supervisor.
@@ -179,19 +195,35 @@ sudo systemctl start supervisord.service && sudo systemctl enable supervisord.se
 sudo supervisorctl status
 ```
 
-### Add the application ports in the firewall allowed port
-
-This feature is ***optional***. We allow the `443` port from `iptable`, `network`, `firewall` and `selinux`.
-
-```console
-sudo firewall-cmd --zone=public --add-port=443/tcp --permanent && sudo firewall-cmd --reload && netstat -tulnp
-```
-
 This application generates a self signed [SSL certificate](https://en.wikipedia.org/wiki/SSL) for make the website https in the application and the application will run in 443 port, so we needed to allow port 443.
 
 
 ## Demo Commands For Update Project
 
 ```console
-cd ~/asp && git pull && sudo systemctl stop supervisord && rm -rf ~/PublishedWebApp && dotnet publish -c Release -o ~/PublishedWebApp && sudo systemctl start supervisord && cd ~ && tail -f /var/log/xml_sign_asp.out.log
+cd ~/asp && sudo rm -rf ./obj ./bin && git pull && sudo systemctl stop supervisord && rm -rf ~/PublishedWebApp && dotnet publish -c Release -o ~/PublishedWebApp && sudo systemctl start supervisord && cd ~ && tail -f /var/log/xml_sign_asp.out.log
+```
+
+## Viewing the server Log
+
+To see `application-log` file, please run this command-
+
+```console
+tail -f /var/log/xml_sign_asp.out.log
+```
+
+To see `application-error-log` file, please run this command-
+
+```console
+tail -f /var/log/xml_sign_asp.err.log
+```
+
+And to see the status of the app, please run this command-
+
+```console
+#Check if supervisor is running
+sudo systemctl status supervisord
+
+# Check status of application in supervisor
+sudo supervisorctl status
 ```
