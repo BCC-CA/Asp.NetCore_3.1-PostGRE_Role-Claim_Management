@@ -119,6 +119,34 @@ Then save the file with-
 
 ### Configure Application with Supervisor
 
+
+Before creating the service, please check the compatiblity by running the application through command line first-
+
+```console
+dotnet run  --urls "http://*:80;https://*:443"
+```
+
+If error occures, then try allowing port `80` and `443` in firewall by running this commands and try again-
+
+```console
+# Generate self signed SSL Certificate
+sudo security set-key-partition-list -D localhost -S unsigned:,teamid:UBF8T346G9
+dotnet dev-certs https
+
+# Enable Firewall
+
+sudo systemctl enable firewalld && sudo systemctl start firewalld && sudo systemctl status firewalld
+
+# Add ports and https in firewall
+
+sudo firewall-cmd --permanent --add-port=80/tcp && sudo firewall-cmd --permanent --add-port=443/tcp
+
+# Allow services in firewall
+sudo firewall-cmd --permanent --add-service=http && sudo firewall-cmd --permanent --add-service=https
+```
+
+If the application is running smoothly, then try make that up and runing with supervisor.
+
 With supervisor, you can make any application running and controll the process of the application. It supports any kind of application like python, nodejs, spring-boot or any kind of application. We will run `dotnet` application. To do this, we need to create a `.conf` file in the previously configured folder (`/etc/supervisord.d/`) with this command-
 
 ```console
@@ -127,7 +155,7 @@ sudo systemctl stop supervisord # stop supervisor server
 sudo vim /etc/supervisord.d/xml_sign_asp.conf
 ```
 
-Then paste the following configuration and save with `wq!`-
+If the application is running smoothly, Then paste the following configuration and save with `wq!`-
 
 ```console
 [program:xml-sign-asp]
