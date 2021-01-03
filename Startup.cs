@@ -123,14 +123,14 @@ namespace StartupProject_Asp.NetCore_PostGRE
 
             });
             #endregion
-            #region View Configuration
+            #region View (Razor File) Configuration
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddWebMarkupMin(
                 options =>
                 {
-                    options.AllowMinificationInDevelopmentEnvironment = true;
-                    options.AllowCompressionInDevelopmentEnvironment = true;
+                    options.AllowMinificationInDevelopmentEnvironment = false;
+                    options.AllowCompressionInDevelopmentEnvironment = false;
                 })
                 .AddHtmlMinification(
                     options =>

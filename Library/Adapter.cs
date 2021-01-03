@@ -61,8 +61,15 @@ namespace StartupProject_Asp.NetCore_PostGRE.Library
             XPathNavigator navigator = document.CreateNavigator();
             using (var writer = navigator.AppendChild())
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(T));
-                serializer.Serialize(writer, source);
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(T));
+                    serializer.Serialize(writer, source);
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
             }
             return document;
         }

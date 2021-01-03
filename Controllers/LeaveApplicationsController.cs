@@ -1,17 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using StartupProject_Asp.NetCore_PostGRE.Data;
 using StartupProject_Asp.NetCore_PostGRE.Data.Enums;
 using StartupProject_Asp.NetCore_PostGRE.Data.Models.AppData;
 using StartupProject_Asp.NetCore_PostGRE.Data.Models.Identity;
+using StartupProject_Asp.NetCore_PostGRE.Library;
+using StartupProject_Asp.NetCore_PostGRE.Models;
 
 namespace StartupProject_Asp.NetCore_PostGRE.Controllers
 {
@@ -155,7 +157,7 @@ namespace StartupProject_Asp.NetCore_PostGRE.Controllers
                 return NotFound();
             }
 
-            var leaveApplication = await _context.LeaveApplications
+            LeaveApplication leaveApplication = await _context.LeaveApplications
                 .Include(l => l.Applicant)
                 .Include(l => l.PreviousSignedFile)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -164,15 +166,24 @@ namespace StartupProject_Asp.NetCore_PostGRE.Controllers
                 return NotFound();
             }
 
+            //Get View Model for creating XML from model
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<LeaveApplication, LeaveApplicationViewModel>();
+            });
+            IMapper iMapper = config.CreateMapper();
+            LeaveApplicationViewModel leaveApplicationView = iMapper.Map<LeaveApplication, LeaveApplicationViewModel>(leaveApplication);
+            XmlDocument xmlDocument = Adapter.SerializeToXml<LeaveApplicationViewModel>(leaveApplicationView);
+            ViewData["xml"] = xmlDocument.OuterXml;
             return View(leaveApplication);
         }
 
         // GET: LeaveApplications/Create
+        [HttpGet]
         [Route("Apply")]
         public IActionResult Create()
         {
-            ViewData["ApplicantId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["LastSignedId"] = new SelectList(_context.XmlFiles, "Id", "FileContent");
+            //ViewData["ApplicantId"] = new SelectList(_context.Users, "Id", "Id");
+            //ViewData["LastSignedId"] = new SelectList(_context.XmlFiles, "Id", "FileContent");
             return View();
         }
 
@@ -180,15 +191,16 @@ namespace StartupProject_Asp.NetCore_PostGRE.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Route("Apply")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Designation,LeaveStart,LeaveEnd,LeaveType,PurposeOfLeave,AddressDuringLeave,PhoneNoDuringLeave,ApplicationStatus,LastSignedId,Id,CreateTime,LastUpdateTime,DeletionTime")] LeaveApplication leaveApplication)
+        public async Task<IActionResult> Create([Bind("Name,Designation,LeaveStart,LeaveEnd,LeaveType,PurposeOfLeave,AddressDuringLeave,PhoneNoDuringLeave")] LeaveApplication leaveApplication)
         {
             if (ModelState.IsValid)
             {
                 leaveApplication.Applicant = await _userManager.GetUserAsync(User);
                 _context.LeaveApplications.Add(leaveApplication);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = leaveApplication.Id });
             }
             ViewData["ApplicantId"] = new SelectList(_context.Users, "Id", "Id", leaveApplication.ApplicantId);
             ViewData["LastSignedId"] = new SelectList(_context.XmlFiles, "Id", "FileContent", leaveApplication.LastSignedId);

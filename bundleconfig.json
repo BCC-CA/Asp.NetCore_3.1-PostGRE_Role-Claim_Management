@@ -32,8 +32,14 @@
       "preserveImportantComments": false,
       "alwaysEscapeNonAscii": true,
       "commentMode": "none",
-      "indentSize": 1
+      "indentSize": 1,
+      "outputMode": "multipleLines",
+      "gzip": true,
+      "evalTreatment": "makeAllSafe",
+      "termSemicolons": false,
+      "minifyEmbeddedCssCode": true,
+      "minifyEmbeddedJsCode": true
     },
-    "sourceMap": false
+    "sourceMap": true
   }
 ]

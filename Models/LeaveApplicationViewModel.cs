@@ -1,23 +1,19 @@
 ﻿using StartupProject_Asp.NetCore_PostGRE.Data.Enums;
-using StartupProject_Asp.NetCore_PostGRE.Data.Models.Identity;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.Serialization;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace StartupProject_Asp.NetCore_PostGRE.Data.Models.AppData
+namespace StartupProject_Asp.NetCore_PostGRE.Models
 {
-    //[DataContract][DataMember]
-    public class LeaveApplication : BaseModel
+    public class LeaveApplicationViewModel
     {
         #region Applicant with Foreign Key
         [ScaffoldColumn(false)]
         [Column("ApplicantId"), Display(Name = "Applicant Id", Prompt = "Please Choose Applicant Id")]
         public Guid? ApplicantId { get; set; }
-        //No Abstract object can be a element in this class because it is going to be serialized
-        //[IgnoreDataMember]
-        [ForeignKey("ApplicantId"), Display(Name = "Applicant", Prompt = "Please Select Applicant")]
-        public virtual User Applicant { get; set; }
         #endregion
 
         [Column("ApplicantName"), Required(ErrorMessage = "Applicant Name should be given"), MinLength(3), MaxLength(32767), Display(Name = "Applicant Name", Prompt = "Please Give Applicant Name")]
@@ -44,16 +40,9 @@ namespace StartupProject_Asp.NetCore_PostGRE.Data.Models.AppData
         //[RegularExpression(@"^[A-Z]+[a-zA-Z0-9""'\s-]*$")]
         [Phone]
         public string PhoneNoDuringLeave { get; set; }
-        [Column("ApplicationStatus"), Display(Name = "Application Status", Prompt = "Please Choose Application Status")]
-        public EApplicationStatus ApplicationStatus { get; set; } = EApplicationStatus.Processing;
-
         #region Last Signed file with Foreign Key
         [Column("LastSignedId"), Display(Name = "Last Signed/Unsigned File", Prompt = "Please select Previous File")]
         public Guid? LastSignedId { get; set; }
-        //No Abstract object can be a element in this class because it is going to be serialized
-        //[IgnoreDataMember]
-        [ForeignKey("LastSignedId"), Display(Name = "Previous Signed/Unsigned File", Prompt = "Please Select Previous File")]
-        public virtual XmlFile PreviousSignedFile { get; set; }
         #endregion
     }
 }
