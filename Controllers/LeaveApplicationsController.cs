@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -24,12 +25,14 @@ namespace StartupProject_Asp.NetCore_PostGRE.Controllers
     public class LeaveApplicationsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<User> _userManager;
 
-        public LeaveApplicationsController(ApplicationDbContext context, UserManager<User> userManager)
+        public LeaveApplicationsController(ApplicationDbContext context, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET: LeaveApplications
@@ -159,7 +162,7 @@ namespace StartupProject_Asp.NetCore_PostGRE.Controllers
 
             LeaveApplication leaveApplication = await _context.LeaveApplications
                 .Include(l => l.Applicant)
-                .Include(l => l.PreviousSignedFile)
+                .Include(l => l.SignedFile)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (leaveApplication == null)
             {
@@ -174,6 +177,7 @@ namespace StartupProject_Asp.NetCore_PostGRE.Controllers
             LeaveApplicationViewModel leaveApplicationView = iMapper.Map<LeaveApplication, LeaveApplicationViewModel>(leaveApplication);
             XmlDocument xmlDocument = Adapter.SerializeToXml<LeaveApplicationViewModel>(leaveApplicationView);
             ViewData["xml"] = xmlDocument.OuterXml;
+            ViewData["Id"] = id;
             return View(leaveApplication);
         }
 
@@ -203,7 +207,7 @@ namespace StartupProject_Asp.NetCore_PostGRE.Controllers
                 return RedirectToAction(nameof(Details), new { id = leaveApplication.Id });
             }
             ViewData["ApplicantId"] = new SelectList(_context.Users, "Id", "Id", leaveApplication.ApplicantId);
-            ViewData["LastSignedId"] = new SelectList(_context.XmlFiles, "Id", "FileContent", leaveApplication.LastSignedId);
+            ViewData["LastSignedId"] = new SelectList(_context.XmlFiles, "Id", "FileContent", leaveApplication.SignedId);
             return View(leaveApplication);
         }
 
@@ -221,7 +225,7 @@ namespace StartupProject_Asp.NetCore_PostGRE.Controllers
                 return NotFound();
             }
             ViewData["ApplicantId"] = new SelectList(_context.Users, "Id", "Id", leaveApplication.ApplicantId);
-            ViewData["LastSignedId"] = new SelectList(_context.XmlFiles, "Id", "FileContent", leaveApplication.LastSignedId);
+            ViewData["LastSignedId"] = new SelectList(_context.XmlFiles, "Id", "FileContent", leaveApplication.SignedId);
             return View(leaveApplication);
         }
 
@@ -258,7 +262,7 @@ namespace StartupProject_Asp.NetCore_PostGRE.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ApplicantId"] = new SelectList(_context.Users, "Id", "Id", leaveApplication.ApplicantId);
-            ViewData["LastSignedId"] = new SelectList(_context.XmlFiles, "Id", "FileContent", leaveApplication.LastSignedId);
+            ViewData["LastSignedId"] = new SelectList(_context.XmlFiles, "Id", "FileContent", leaveApplication.SignedId);
             return View(leaveApplication);
         }
 
@@ -272,7 +276,7 @@ namespace StartupProject_Asp.NetCore_PostGRE.Controllers
 
             var leaveApplication = await _context.LeaveApplications
                 .Include(l => l.Applicant)
-                .Include(l => l.PreviousSignedFile)
+                .Include(l => l.SignedFile)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (leaveApplication == null)
             {
@@ -291,6 +295,34 @@ namespace StartupProject_Asp.NetCore_PostGRE.Controllers
             _context.LeaveApplications.Remove(leaveApplication);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [Route("Upload-Signed-Application-Ajax")]
+        [HttpPost]
+        public async Task<XmlFile> UploadSignedApplicationAsync(Guid id, string toSignXml, string signedXml)
+        {
+            //string signedXml = Request.Form["id"].FirstOrDefault();
+            //string previousLeaveApplicationId = Request.Form["toSignXml"].FirstOrDefault();
+
+            //Verify signature of toSignXml and signedXml && data of id and toSignXml
+
+            XmlFile xmlFile = new XmlFile();
+            xmlFile.TableName = ETableName.LeaveApplication;
+            xmlFile.DbEntryId = id;
+            xmlFile.SignedContent = signedXml;
+            xmlFile.Signer = await _userManager.GetUserAsync(HttpContext.User);
+            _context.XmlFiles.Add(xmlFile);
+
+            LeaveApplication leaveApplication = await _context.LeaveApplications.FindAsync(id);
+            leaveApplication.ApplicationStatus = EApplicationStatus.Processing;
+            if(leaveApplication.SignedFile==null)
+            {
+                leaveApplication.SignedFile = xmlFile;
+                _context.LeaveApplications.Update(leaveApplication);
+
+                await _context.SaveChangesAsync();
+            }
+            return leaveApplication.SignedFile;
         }
 
         private bool LeaveApplicationExists(Guid id)

@@ -6,23 +6,36 @@
 
 <h1>Details</h1>
 
-
-
 <div>
     <h4>LeaveApplication</h4>
-    <a type="button" class="btn-digital-sign btn btn-warning" href="#"
-       sign-xml="@ViewData["xml"]"
-       sign-reason="Anything"
-       sign-server-id="@Html.DisplayFor(model => model.Id)">
-        click to sign
-    </a>
+
     <hr />
+
+    @if (Model.SignedFile == null)
+    {
+        <a type="button" class="btn-digital-sign btn btn-warning" href="#"
+           sign-ajax-url="@Url.Action("UploadSignedApplication", "LeaveApplications")"
+           sign-xml="@ViewData["xml"]"
+           sign-reason="First Signature"
+           sign-server-id="@ViewData["Id"]">
+            click to sign
+        </a>
+    }
+    else
+    {
+        <a type="button" class="btn btn-warning disabled" disabled href="#">
+            Already Signed and Submitted
+        </a>
+    }
+
+    <hr />
+
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Applicant)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Applicant.Id)
+            @Html.DisplayFor(model => model.Applicant.FullName)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
@@ -79,10 +92,10 @@
             @Html.DisplayFor(model => model.ApplicationStatus)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PreviousSignedFile)
+            @Html.DisplayNameFor(model => model.SignedFile)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PreviousSignedFile.FileContent)
+            @Html.DisplayFor(model => model.SignedFile.SignedContent)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CreateTime)
@@ -91,10 +104,10 @@
             @Html.DisplayFor(model => model.CreateTime)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastUpdateTime)
+            @Html.DisplayNameFor(model => model.CreateTime)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LastUpdateTime)
+            @Html.DisplayFor(model => model.CreateTime)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DeletionTime)

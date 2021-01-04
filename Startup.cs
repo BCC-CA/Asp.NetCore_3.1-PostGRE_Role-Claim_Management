@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Net;
 using StartupProject_Asp.NetCore_PostGRE.Data.Models.Identity;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 using StartupProject_Asp.NetCore_PostGRE.Services.EmailService;
 using WebMarkupMin.AspNetCore3;
@@ -17,6 +16,7 @@ using StartupProject_Asp.NetCore_PostGRE.Data.Enums;
 using StartupProject_Asp.NetCore_PostGRE.AuthorizationRequirement;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Http;
 
 namespace StartupProject_Asp.NetCore_PostGRE
 {
@@ -45,6 +45,9 @@ namespace StartupProject_Asp.NetCore_PostGRE
             #region Email Service Configuration
             services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
             services.AddTransient<IEmailSender, EmailSender>();
+            #endregion
+            #region HttpContextAccessor Service Configuration
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             #endregion
             #region DB Service Configuration
             services.AddDbContext<ApplicationDbContext>(options => {

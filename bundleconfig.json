@@ -27,7 +27,7 @@
     ],
     "minify": {
       "enabled": true,
-      "renameLocals": true,
+      "renameLocals": false,
       "keepOneSpaceWhenCollapsing": true,
       "preserveImportantComments": false,
       "alwaysEscapeNonAscii": true,
@@ -38,8 +38,8 @@
       "evalTreatment": "makeAllSafe",
       "termSemicolons": false,
       "minifyEmbeddedCssCode": true,
-      "minifyEmbeddedJsCode": true
+      "minifyEmbeddedJsCode": false
     },
-    "sourceMap": true
+    "sourceMap": false
   }
 ]

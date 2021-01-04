@@ -40,7 +40,22 @@ $(document).ready(function () {
 			console.log("Sign Done", new Date());
 
 			//Make your AJAX call here
-
+			$.ajax({
+				url: htmlElement.getAttribute('sign-ajax-url'),
+				type: "post",
+				data: {
+					id: htmlElement.getAttribute('sign-server-id'),
+					toSignXml: htmlElement.getAttribute('sign-xml'),
+					signedXml: signatureText
+				},
+				success: function (response) {
+					console.log(response);
+					alert("File Signed and uploaded");
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log(textStatus, errorThrown);
+				}
+			});
 			console.log(htmlElement);
 		} else {
 			console.log(htmlElement, "Sign Failed", new Date());

@@ -16,7 +16,7 @@ namespace StartupProject_Asp.NetCore_PostGRE.Data.Models.AppData
         public Guid? ApplicantId { get; set; }
         //No Abstract object can be a element in this class because it is going to be serialized
         //[IgnoreDataMember]
-        [ForeignKey("ApplicantId"), Display(Name = "Applicant", Prompt = "Please Select Applicant")]
+        [ForeignKey("ApplicantId"), Display(Name = "Applier Name (From Account)", Prompt = "Please Select Applicant")]
         public virtual User Applicant { get; set; }
         #endregion
 
@@ -45,15 +45,15 @@ namespace StartupProject_Asp.NetCore_PostGRE.Data.Models.AppData
         [Phone]
         public string PhoneNoDuringLeave { get; set; }
         [Column("ApplicationStatus"), Display(Name = "Application Status", Prompt = "Please Choose Application Status")]
-        public EApplicationStatus ApplicationStatus { get; set; } = EApplicationStatus.Processing;
+        public EApplicationStatus ApplicationStatus { get; set; } = EApplicationStatus.Started;
 
-        #region Last Signed file with Foreign Key
-        [Column("LastSignedId"), Display(Name = "Last Signed/Unsigned File", Prompt = "Please select Previous File")]
-        public Guid? LastSignedId { get; set; }
+        #region First Signed file with Foreign Key
+        [Column("SignedId"), Display(Name = "Signed/Unsigned Data", Prompt = "Please select Signed Data")]
+        public Guid? SignedId { get; set; }
         //No Abstract object can be a element in this class because it is going to be serialized
         //[IgnoreDataMember]
-        [ForeignKey("LastSignedId"), Display(Name = "Previous Signed/Unsigned File", Prompt = "Please Select Previous File")]
-        public virtual XmlFile PreviousSignedFile { get; set; }
+        [ForeignKey("SignedId"), Display(Name = "Signed/Unsigned Data", Prompt = "Please Provide Signature")]
+        public virtual XmlFile SignedFile { get; set; }
         #endregion
     }
 }

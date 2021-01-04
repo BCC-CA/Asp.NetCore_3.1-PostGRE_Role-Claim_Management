@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Hosting;
 using StartupProject_Asp.NetCore_PostGRE.Data.Models;
 using StartupProject_Asp.NetCore_PostGRE.Data.Models.AppData;
@@ -72,12 +74,9 @@ namespace StartupProject_Asp.NetCore_PostGRE.Data
             #endregion
 
             #region Data Seeding
-            if (Environment.IsDevelopment())
+            if (Environment.IsDevelopment())// && !this.Database.CanConnect()
             {
-                //using (SeedController seeder = new SeedController(builder))
-                //{
-                //    seeder.Execute();
-                //}
+                //Only used in first time to seed Data
                 using SeedController seeder = new SeedController(builder);
                 seeder.Execute();
             }
@@ -115,10 +114,17 @@ namespace StartupProject_Asp.NetCore_PostGRE.Data
             foreach (var entity in entities)
             {
                 //Should store location also from here- http://www.jerriepelser.com/blog/aspnetcore-geo-location-from-ip-address/
-
-                if (entity.State == EntityState.Modified)
+                if(entity.State == EntityState.Added)
+                {
+                    ((BaseModel)entity.Entity).CreateTime = DateTime.UtcNow;
+                }
+                else if (entity.State == EntityState.Modified)
                 {
                     ((BaseModel)entity.Entity).LastUpdateTime = DateTime.UtcNow;
+                }
+                else if (entity.State == EntityState.Deleted)
+                {
+                    ((BaseModel)entity.Entity).DeletionTime = DateTime.UtcNow;
                 }
             }
         }

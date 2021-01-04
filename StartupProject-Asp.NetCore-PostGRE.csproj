@@ -22,6 +22,28 @@
     <Compile Remove="Data\Migrations\20201209150208_ApplicationTableAdded.Designer.cs" />
     <Compile Remove="Data\Migrations\20201209152302_LeaveApplicationAdded.cs" />
     <Compile Remove="Data\Migrations\20201209152302_LeaveApplicationAdded.Designer.cs" />
+    <Compile Remove="Data\Migrations\20201209153552_LeaveApplicationAdded.cs" />
+    <Compile Remove="Data\Migrations\20201209153552_LeaveApplicationAdded.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210104023854_XmlFileDbUpdated.cs" />
+    <Compile Remove="Data\Migrations\20210104023854_XmlFileDbUpdated.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210104041657_XmlFileDbUpdated.cs" />
+    <Compile Remove="Data\Migrations\20210104041657_XmlFileDbUpdated.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210104044435_LeaveApplicationAdd.cs" />
+    <Compile Remove="Data\Migrations\20210104044435_LeaveApplicationAdd.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210104045630_LeaveApplicationAdd.cs" />
+    <Compile Remove="Data\Migrations\20210104045630_LeaveApplicationAdd.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210104045913_LeaveApplicationAdd.cs" />
+    <Compile Remove="Data\Migrations\20210104045913_LeaveApplicationAdd.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210104054644_LeaveApplicationAdd.cs" />
+    <Compile Remove="Data\Migrations\20210104054644_LeaveApplicationAdd.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210104062327_LeaveApplicationAdd.cs" />
+    <Compile Remove="Data\Migrations\20210104062327_LeaveApplicationAdd.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210104063244_LeaveApplicationAdd.cs" />
+    <Compile Remove="Data\Migrations\20210104063244_LeaveApplicationAdd.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210104063409_LeaveApplicationAdd.cs" />
+    <Compile Remove="Data\Migrations\20210104063409_LeaveApplicationAdd.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210104063911_LeaveApplicationAdd.cs" />
+    <Compile Remove="Data\Migrations\20210104063911_LeaveApplicationAdd.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
