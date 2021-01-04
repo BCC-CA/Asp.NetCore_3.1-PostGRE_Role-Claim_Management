@@ -44,6 +44,10 @@
     <Compile Remove="Data\Migrations\20210104063409_LeaveApplicationAdd.Designer.cs" />
     <Compile Remove="Data\Migrations\20210104063911_LeaveApplicationAdd.cs" />
     <Compile Remove="Data\Migrations\20210104063911_LeaveApplicationAdd.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210104065835_LeaveApplicationAdd.cs" />
+    <Compile Remove="Data\Migrations\20210104065835_LeaveApplicationAdd.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210104072919_LeaveApplicationAdd.cs" />
+    <Compile Remove="Data\Migrations\20210104072919_LeaveApplicationAdd.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

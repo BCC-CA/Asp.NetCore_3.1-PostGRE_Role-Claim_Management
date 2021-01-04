@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Hosting;
 using StartupProject_Asp.NetCore_PostGRE.Data.Models;
 using StartupProject_Asp.NetCore_PostGRE.Data.Models.AppData;

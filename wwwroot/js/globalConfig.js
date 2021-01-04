@@ -25,11 +25,11 @@ $(document).ready(function () {
 
 	//Digital Signature - Start
 	function signProcessStartEvent(htmlElement) {
-		console.log("Sign Started", new Date());
+		//console.log("Sign Started", new Date());
 	}
 
 	function signProcessContinueEvent(htmlElement) {
-		console.log("Sign Continue", (new Date()).getUTCMilliseconds());
+		//console.log("Sign Continue", (new Date()).getUTCMilliseconds());
 	}
 
 	function signProcessEndEvent(htmlElement, status = true) {
@@ -37,7 +37,7 @@ $(document).ready(function () {
 			var signatureText = htmlElement.getAttribute('signed-xml');
 			htmlElement.removeAttribute('signed-xml');
 			var signatureId = htmlElement.getAttribute('sign-server-id');
-			console.log("Sign Done", new Date());
+			//console.log("Sign Done", new Date());
 
 			//Make your AJAX call here
 			$.ajax({

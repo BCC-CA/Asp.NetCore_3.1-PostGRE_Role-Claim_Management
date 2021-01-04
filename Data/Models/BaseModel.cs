@@ -20,15 +20,15 @@ namespace StartupProject_Asp.NetCore_PostGRE.Data.Models
         [Column("CreateTime", TypeName = "TIMESTAMPTZ")]
         [IgnoreDataMember]
         public DateTime? CreateTime { get; set; } = DateTime.UtcNow;
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        [HiddenInput(DisplayValue = false), Display(Name = "Last Update Time"), Column("LastUpdateTime")]
+
+        [HiddenInput(DisplayValue = false), Display(Name = "Last Update Time")]
+        [Column("LastUpdateTime", TypeName = "TIMESTAMPTZ")]
+        [IgnoreDataMember]
         public DateTime? LastUpdateTime { get; set; }
 
-        //Soft Delete
-        /*
         [HiddenInput(DisplayValue = false), Display(Name = "Is Item Deleated"), Column("IsDeleted")]
         public bool IsDeleted { get; set; } = false;
-        */
+
         [IgnoreDataMember]
         [HiddenInput(DisplayValue = false)]
         public DateTime? DeletionTime { get; set; }     //DeletionTime not null means the item is deleted

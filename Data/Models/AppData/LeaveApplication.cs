@@ -3,7 +3,6 @@ using StartupProject_Asp.NetCore_PostGRE.Data.Models.Identity;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.Serialization;
 
 namespace StartupProject_Asp.NetCore_PostGRE.Data.Models.AppData
 {
