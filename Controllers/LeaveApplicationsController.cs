@@ -318,7 +318,6 @@ namespace StartupProject_Asp.NetCore_PostGRE.Controllers
             if(leaveApplication.SignedFile==null)
             {
                 leaveApplication.SignedFile = xmlFile;
-                leaveApplication.LastUpdateTime = DateTime.UtcNow;  //Should be auto configured from context
                 _context.LeaveApplications.Update(leaveApplication);
 
                 await _context.SaveChangesAsync();

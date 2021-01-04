@@ -60,7 +60,6 @@ $(document).ready(function () {
 		} else {
 			console.log(htmlElement, "Sign Failed", new Date());
 		}
-
 	}
 
 	function startSignProcess(htmlElement) {

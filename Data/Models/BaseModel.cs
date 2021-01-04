@@ -30,7 +30,8 @@ namespace StartupProject_Asp.NetCore_PostGRE.Data.Models
         public bool IsDeleted { get; set; } = false;
 
         [IgnoreDataMember]
-        [HiddenInput(DisplayValue = false)]
+        [HiddenInput(DisplayValue = false), Display(Name = "Deleation Time")]
+        [Column("DeletionTime", TypeName = "TIMESTAMPTZ")]
         public DateTime? DeletionTime { get; set; }     //DeletionTime not null means the item is deleted
 
         public void SoftDelete()
