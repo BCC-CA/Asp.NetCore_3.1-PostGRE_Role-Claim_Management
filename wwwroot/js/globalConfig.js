@@ -51,6 +51,7 @@ $(document).ready(function () {
 				success: function (response) {
 					console.log(response);
 					alert("File Signed and uploaded");
+					window.location.reload();
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
 					console.log(textStatus, errorThrown);
